@@ -1,0 +1,310 @@
+<style>
+.header-hero {
+  font-size: 18px;
+}
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+}
+.switch input { 
+  display: none; 
+}
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 20px;
+}
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+input:checked + .slider {
+  background-color: #d00;
+}
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-group .switch,
+.form-group select {
+  flex: 0 0 auto;
+}
+
+.form-group label:not(.switch) {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.form-group input[type="number"] {
+  flex: 0 0 auto;
+}
+
+hr {
+  border: none;
+  border-top: 2px solid #d00 !important;
+  margin: 16px 0;
+}
+
+</style>
+
+<form>
+
+  <!-- Cabeçalho com logo -->
+  <div style="display: flex; align-items: center; gap: 10px; font-size: 1.5em; margin-bottom: 10px;">
+    <img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="48" height="48">
+    <span>I Choose Roll! Configurações do Hero Point da Casa</span>
+	</div>
+	
+	<hr>
+	
+  <!-- Caixa para ligar a função -->
+  <div class="form-group">
+    <label for="ativarHeroPointDaCasa">Ativar Hero Point da Casa</label>
+   <label class="switch">
+      <input type="checkbox" name="ativarHeroPointDaCasa" {{#if ativarHeroPointDaCasa}}checked{{/if}}>
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div>
+	<small>{{{dicaAtivar}}}</small>
+  </div>
+  <br>
+
+  <!-- Caixa para HPdC Adicional -->
+  <div class="form-group">
+    <label for="heroPointsDaCasaAdicional">Hero Points da Casa Adicionais</label>
+    <label class="switch">
+      <input type="checkbox" name="heroPointsDaCasaAdicional" {{#if heroPointsDaCasaAdicional}}checked{{/if}}>
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div>
+	<small>{{{dicaAdicional}}}</small>
+  </div>
+  <br>
+  
+  <!-- habilita o uso do valor maior para d20 invés do novo valor -->
+  <div class="form-group">
+  <label for="HPdCMaior">Usar Maior Valor</label>
+  <label class="switch">
+    <input type="checkbox" name="HPdCMaior" {{#if HPdCMaior}}checked{{/if}}>
+    <span class="slider"></span>
+  </label>
+</div>
+<div>
+  <small>{{{dicaMaior}}}</small>
+</div>
+<br>
+  
+    <!-- Caixa para valor max do HPdC -->
+    <div class="form-group">
+      <label for="valorHPdC">Quantidade Máxima de Hero Point da Casa</label>
+      <input type="number" name="valorHPdC" value="{{valorHPdC}}" min="1" step="1" style="width: 60px; text-align: right;">
+    </div>
+    <div>
+      <small>{{{dicaValor}}}</small>
+    </div>
+	<br>
+	
+<!-- dropdown para o tipo de pré-requisito -->
+<div class="form-group">
+  <label for="HPdCRequizitoTipo">Tipo de Pré-requisito</label>
+  <select name="HPdCRequizitoTipo">
+    <option value="nenhum" {{#if (eq HPdCRequizitoTipo "nenhum")}}selected{{/if}}>Nenhum</option>
+    <option value="feat" {{#if (eq HPdCRequizitoTipo "feat")}}selected{{/if}}>Feat</option>
+    <option value="trait" {{#if (eq HPdCRequizitoTipo "trait")}}selected{{/if}}>Trait</option>
+    <option value="effect" {{#if (eq HPdCRequizitoTipo "effect")}}selected{{/if}}>Efeito</option>
+  </select>
+</div>
+<div>
+  <small>{{{dicaRequizitoTipo}}}</small>
+</div>
+<br>
+
+<!-- define o slug do tipo de pré-requisito -->
+<div class="form-group">
+  <label for="HPdCRequisitoSlug">Slug do Pré-requisito</label>
+  <input type="text" name="HPdCRequisitoSlug" value="{{HPdCRequisitoSlug}}">
+</div>
+<div>
+  <small>{{{dicaRequizitoSlug}}}</small>
+</div>
+  
+  <hr>
+  
+  <!-- Caixa para HPdC Roubado -->
+  <div class="form-group">
+    <label for="HPdCRoubado">"Keeley's Hero Point Rule" Customizada</label>
+    <label class="switch">
+      <input type="checkbox" name="HPdCRoubado" {{#if HPdCRoubado}}checked{{/if}}>
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div>
+    <small>{{{dicaRoubado}}}</small>
+  </div>
+  <br>
+  
+  <!-- Limite de uso roubado -->
+  <div class="form-group">
+  <label for="HPdCRLimite">Limites de Uso</label>
+  <input type="number" name="HPdCRLimite" value="{{HPdCRLimite}}" min="1" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaLimite}}}</small>
+</div>
+<br>
+  
+  <!-- Caixa para Valor Máximo de Adição -->
+<div class="form-group">
+  <label for="HPdCRDado">Valor Máximo do Dado para Adição</label>
+  <input type="number" name="HPdCRDado" value="{{HPdCRDado}}" min="1" max="19" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaDado}}}</small>
+</div>
+<br>
+
+<!-- Caixa para Bônus Adicionado -->
+<div class="form-group">
+  <label for="HPdCRBonus">Bônus Adicionado</label>
+  <input type="number" name="HPdCRBonus" value="{{HPdCRBonus}}" min="1" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaBonus}}}</small>
+</div>
+
+<hr>
+
+  <!-- caixa para HPdC Consolação -->
+  <div class="form-group">
+    <label for="HPdCConsolacao">Hero Point da Casa de Consolação</label>
+    <label class="switch">
+      <input type="checkbox" name="HPdCConsolacao" {{#if HPdCConsolacao}}checked{{/if}}>
+      <span class="slider"></span>
+    </label>
+  </div>
+  <div>
+    <small>{{{dicaConsolacao}}}</small>
+  </div>
+  <br>
+  
+  <!-- limite de uso consolação -->
+  <div class="form-group">
+  <label for="HPdCCLimite">Limites de Uso</label>
+  <input type="number" name="HPdCCLimite" value="{{HPdCCLimite}}" min="1" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaLimite}}}</small>
+</div>
+  
+  <hr>
+
+  <!-- Caixa com dropdown para uso no dano -->
+  <div class="form-group">
+  <label for="HPdCNoDano">Hero Point da Casa no Dano</label>
+  <select name="HPdCNoDano">
+    <option value="Desligado" {{#if (eq HPdCNoDano "Desligado")}}selected{{/if}}>Desligado</option>
+    <option value="Novo" {{#if (eq HPdCNoDano "Novo")}}selected{{/if}}>Novo valor</option>
+    <option value="Maior" {{#if (eq HPdCNoDano "Maior")}}selected{{/if}}>Maior valor</option>
+  </select>
+  </div>
+  <div>
+   <small>{{{dicaNoDano}}}</small>
+   </div>
+   <br>
+   
+   <!-- limite de uso para dano -->
+   <div class="form-group">
+  <label for="HPdCDLimite">Limites de Uso</label>
+  <input type="number" name="HPdCDLimite" value="{{HPdCDLimite}}" min="1" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaLimite}}}</small>
+</div>
+   
+   <hr>
+  
+   <!-- caixa com dropdown para opções defensivas -->
+   <div class="form-group">
+     <label for="HPdCDefensivo">Hero Point da Casa Defensivo</label>
+     <select name="HPdCDefensivo">
+       <option value="Desligado" {{#if (eq HPdCDefensivo "Desligado")}}selected{{/if}}>Desligado</option>
+       <option value="Ataque" {{#if (eq HPdCDefensivo "Ataque")}}selected{{/if}}>Ataque</option>
+       <option value="Save" {{#if (eq HPdCDefensivo "Save")}}selected{{/if}}>Salva Guarda</option>
+       <option value="Dano" {{#if (eq HPdCDefensivo "Dano")}}selected{{/if}}>Dano</option>
+	   <option value="Ambos" {{#if (eq HPdCDefensivo "Ambos")}}selected{{/if}}>Ataque e Salva Guarda</option>
+	   <option value="AtaqueEDano" {{#if (eq HPdCDefensivo "AtaqueEDano")}}selected{{/if}}>Ataque e Dano</option>
+	   <option value="SaveEDano" {{#if (eq HPdCDefensivo "SaveEDano")}}selected{{/if}}>Salva Guarda e Dano</option>
+	   <option value="Todos" {{#if (eq HPdCDefensivo "Todos")}}selected{{/if}}>Todos</option>
+     </select>
+   </div>
+   <div>
+     <small>{{{dicaDefensivo}}}</small>
+   </div>
+   <br>
+   
+   <!-- limite de uso defensivo -->
+   <div class="form-group">
+  <label for="HPdCDfLimite">Limites de Uso</label>
+  <input type="number" name="HPdCDfLimite" value="{{HPdCDfLimite}}" min="1" step="1" style="width: 60px; text-align: right;">
+</div>
+<div>
+  <small>{{{dicaLimite}}}</small>
+</div>
+	
+	<hr>
+  
+  <!-- Caixa para escrever o nome da regra da casa -->
+  <div class="form-group">
+    <label for="nomeHPdC">Nome do Hero Point da Casa</label>
+    <input type="text" name="nomeHPdC" value="{{nomeHPdC}}">
+  </div>
+  <div>
+	<small>{{{dicaNome}}}</small>
+  </div>
+  <br>
+
+  <!-- Caixa para escrever endereço da imagem + botão de janela para facilidade -->
+  <div class="form-group">
+    <label for="iconeHPdC">Ícone do Hero Point da Casa</label>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <input type="text" name="iconeHPdC" value="{{iconeHPdC}}" style="flex:1;"
+	  
+	  <!-- É assim que se monta um botão de janela no FVTT12+ (e em outros lugares kek) -->
+      
+	  <button type="button" class="file-picker" data-target="iconeHPdC">
+        Escolher
+      </button>
+    </div>
+  </div>
+  <div>
+	<small>{{{dicaIcone}}}</small>
+  </div>
+  
+  <!-- Isso faz as opções serem salvas e fechar o dialogo ao salvar -->
+  <footer class="sheet-footer flexrow">
+    <button type="submit"><i class="fas fa-save"></i> Salvar</button>
+  </footer>
+</form>

@@ -1,0 +1,226 @@
+{
+  "id": "i-choose-roll",
+  "title": "I Choose Roll!",
+  "version": "1.0.0.0",
+  "socket": true,
+  "esmodules": [
+    "Configuracoes.js",
+    "HeroPointPermanente.js",
+    "ArbritoDeCombate.js",
+    "SistemadeAlarmes.js",
+    "socket_link.js",
+    "relinkOn.js"
+  ],
+  "compatibility": {
+    "minimum": "11",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Kitamaro",
+      "discord": "Kitamaro",
+      "flags": {}
+    }
+  ],
+  "packs": [
+    {
+      "name": "i-choose-mobs",
+      "label": "I Choose Mobs",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-mobs",
+      "type": "Actor",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-spells",
+      "label": "I Choose Spells",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-spells",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-weapons-and-shields",
+      "label": "I Choose  Weapons and Shields",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-weapons-and-shields",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-consumables",
+      "label": "I Choose Consumables",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-consumables",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-equipment",
+      "label": "I Choose Equipment",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-equipment",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-actions-and-feats",
+      "label": "I Choose Actions and Feats",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-actions-and-feats",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-maps",
+      "label": "I Choose Maps",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-maps",
+      "type": "Scene",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-journals",
+      "label": "I Choose Journals",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-journals",
+      "type": "JournalEntry",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-macros",
+      "label": "I Choose Macros",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-macros",
+      "type": "Macro",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "i-choose-mob-power",
+      "label": "I Choose Mob Power",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/i-choose-mob-power",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "choose-roll-system-bindings",
+      "label": "I Choose Roll - [System Bindings]",
+      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
+      "path": "packs/choose-roll-system-bindings",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      }
+    }
+  ],
+  "media": [
+    {
+      "type": "setup",
+      "caption": "I Choose Roll!",
+      "thumbnail": "modules/i-choose-roll/Thumbs/Logos/banner.jpg",
+      "loop": false,
+      "flags": {}
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "I Choose Roll!",
+      "sorting": "m",
+      "packs": [
+        "i-choose-macros",
+        "i-choose-journals",
+        "i-choose-actions-and-feats",
+        "i-choose-maps",
+        "i-choose-equipment",
+        "i-choose-consumables",
+        "i-choose-weapons-and-shields",
+        "i-choose-spells",
+        "i-choose-mob-power",
+        "i-choose-mobs"
+      ],
+      "color": null,
+      "folders": []
+    },
+    {
+      "name": "I Choose System",
+      "sorting": "m",
+      "packs": [
+        "choose-roll-system-bindings"
+      ],
+      "color": "#b80000",
+      "folders": []
+    }
+  ],
+  "relationships": {
+    "requires": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+        "compatibility": {}
+      },
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "compatibility": {}
+      }
+    ],
+    "recommends": [
+      {
+        "id": "token-attacher",
+        "type": "module",
+        "compatibility": {}
+      }
+    ],
+    "systems": [
+      {
+        "id": "pf2e",
+        "type": "system",
+        "compatibility": {}
+      }
+    ]
+  }
+}
