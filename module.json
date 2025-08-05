@@ -24,90 +24,6 @@
   ],
   "packs": [
     {
-      "name": "i-choose-mobs",
-      "label": "I Choose Mobs",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-mobs",
-      "type": "Actor",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-spells",
-      "label": "I Choose Spells",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-spells",
-      "type": "Item",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-weapons-and-shields",
-      "label": "I Choose  Weapons and Shields",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-weapons-and-shields",
-      "type": "Item",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-consumables",
-      "label": "I Choose Consumables",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-consumables",
-      "type": "Item",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-equipment",
-      "label": "I Choose Equipment",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-equipment",
-      "type": "Item",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-actions-and-feats",
-      "label": "I Choose Actions and Feats",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-actions-and-feats",
-      "type": "Item",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-maps",
-      "label": "I Choose Maps",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-maps",
-      "type": "Scene",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
       "name": "i-choose-journals",
       "label": "I Choose Journals",
       "banner": "modules/i-choose-roll/Thumbs/banner.webp",
@@ -125,18 +41,6 @@
       "banner": "modules/i-choose-roll/Thumbs/banner.webp",
       "path": "packs/i-choose-macros",
       "type": "Macro",
-      "system": "pf2e",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    },
-    {
-      "name": "i-choose-mob-power",
-      "label": "I Choose Mob Power",
-      "banner": "modules/i-choose-roll/Thumbs/banner.webp",
-      "path": "packs/i-choose-mob-power",
-      "type": "Item",
       "system": "pf2e",
       "ownership": {
         "PLAYER": "OBSERVER",
@@ -222,5 +126,7 @@
         "compatibility": {}
       }
     ]
-  }
+  },
+  "description": "",
+  "flags": {}
 }
