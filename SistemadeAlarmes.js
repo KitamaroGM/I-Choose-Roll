@@ -2,12 +2,12 @@
 // Sistema de Alarmes - gerenciamento de efeitos sustentados, sincronia, lembretes e reações a eventos de combate
 //====================
 
-console.log("I Choose Roll! [Sistema de Alarmes] 1.0.9 carregado");
+console.log("I Choose Roll! [Sistema de Alarmes] 1.0.11 carregado");
 
 //====================
 // Bloco 0 - Constantes do Projeto
 //====================
-const logo = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;">`;
+const logo = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="32" height="32" style="vertical-align:middle;margin:0 4px 0 0;display:inline-block;">`;
 const CMacros = "i-choose-roll.i-choose-macros";
 const NCMacros = "I Choose Macros!";
 const prefixo = "I Choose Roll! [Sistema de Alarmes]";
@@ -398,26 +398,6 @@ Hooks.on("pf2e.endTurn", async (combatente) => {
 	}
 	
 	console.log(`${prefixo} Fim do turno de ${ator.name} — iniciando verificação de efeitos.`);
-	
-	// Verifica e exibe descrições alarmeFimTurno
-	const efeitosComTeste = ator.itemTypes.effect.filter(efeito =>
-	 efeito.system?.rules?.some(regra => regra.key === "RollOption" && regra.option === "alarmeFimTurno")
-	);
-	
-	for (const efeito of efeitosComTeste) {
-		console.log(`${prefixo} Exibindo descrição alarmeFimTurno para: ${efeito.name}`);
-		
-		const descricao = await TextEditor.enrichHTML(efeito.system.description.value || "", {
-			async: true,
-			rollData: ator.getRollData(),
-			secrets: false
-		});
-		
-		await ChatMessage.create({
-			speaker: ChatMessage.getSpeaker({ token }),
-			content: `<div class="chat-card">${logo}<strong>${efeito.name}</strong><br>${descricao}</div>`
-		});
-	}
 	
 	// Remove efeitos marcados com dissiparFimTurno
 	const efeitosParaRemover = ator.itemTypes.effect.filter(e => e.getFlag("i-choose-roll", "dissiparFimTurno"));

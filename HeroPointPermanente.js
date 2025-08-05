@@ -7,8 +7,8 @@ console.log(`I Choose Roll! [Hero Point Permanente] 1.0.174 carregado — inicia
 // Bloco 0 - Constantes usadas nos Hooks de Hero Point Permanente
 //====================
 const logo = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="32" height="32" style="vertical-align:middle;margin:0 4px 0 0;display:inline-block;">`;
-const logoP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="28" height="28" style="vertical-align:middle; margin-right:6px;">`;
-const logoPP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="16" height="16" style="vertical-align:middle; margin-right:4px;">`;
+const logoP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="28" height="28" style="vertical-align:middle; margin:0 4px 0 0;display:inline-block;">`;
+const logoPP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="16" height="16" style="vertical-align:middle; margin:0 4px 0 0;display:inline-block;">`;
 const prefixo = "I Choose Roll! [Hero Point Permanente]";
 const mID = "i-choose-roll";
 
