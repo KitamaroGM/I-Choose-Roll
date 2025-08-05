@@ -3,6 +3,10 @@
   "title": "I Choose Roll!",
   "version": "1.0.0.0",
   "socket": true,
+  "url": "https://github.com/KitamaroGM/I-Choose-Roll",
+  "manifest": "https://raw.githubusercontent.com/KitamaroGM/I-Choose-Roll/main/module.json",
+  "download": "https://github.com/KitamaroGM/I-Choose-Roll/archive/refs/heads/main.zip",
+  "description": "Automação de auras, alarmes e Hero Point da Casa para Pathfinder 2e.",
   "esmodules": [
     "Configuracoes.js",
     "HeroPointPermanente.js",
@@ -127,6 +131,5 @@
       }
     ]
   },
-  "description": "",
   "flags": {}
 }
