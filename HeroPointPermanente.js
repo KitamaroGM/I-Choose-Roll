@@ -1,7 +1,7 @@
 //====================
 // HeroPointPermanente.js
 //====================
-console.log(`I Choose Roll! [Hero Point Permanente] 1.0.174 carregado — inicializando variáveis e constantes`);
+console.log(`I Choose Roll! [Hero Point Permanente] 1.0.175 carregado — inicializando variáveis e constantes`);
 
 //====================
 // Bloco 0 - Constantes usadas nos Hooks de Hero Point Permanente
@@ -239,7 +239,7 @@ Hooks.on("renderActorSheet", async (app, html, data) => {
 	
 		// Verifica se é um ator do tipo personagem
 		if (ator.type !== "character") return;
-		logDebug(`${prefixo} Injetando Hero Point Permanente na ficha de ${ator.name}`);
+		logDebug(`${prefixo} Renderizando ${nomeHPdC} na ficha de ${ator.name}`);
 		
 		// Seleciona a área dos hero points padrão
 		const header = html.find('header.char-header');
@@ -258,7 +258,7 @@ Hooks.on("renderActorSheet", async (app, html, data) => {
 		
 			// Oculta o recurso padrão de Hero Points
 			container.children().css("visibility", "hidden");
-			logDebug(`${prefixo} Hero Points padrão tornados invisíveis (nome e bolinhas) mas mantendo espaço para alinhamento para ${ator.name}`);
+			logDebug(`${prefixo} Hero Points padrão tornados invisíveis (nome e bolinhas) mas mantendo espaço de alinhamento para ${ator.name}`);
 		}
 		
 		if (!container.length) {
@@ -314,17 +314,56 @@ Hooks.on("renderActorSheet", async (app, html, data) => {
 			"left": "0px"
 		});
 		
-		// Cria bolinhas
+		// Cria bolinhas ou contador, dependendo da configuração
 		async function renderizarBolinhasHeroPoint() {
-			
+			const FN = `[Contador visual]`;
 			const valor = (await ator.getFlag("i-choose-roll", "heroPointsDaCasa")) ?? 0;
-			const bolinhas = [];
+			logDebug(`${prefixo} ${FN} Valor atual de HPdC: ${valor}`);
+			const usarContadorNumerico = max >= 11;
+			logDebug(`${prefixo} ${FN} Modo de exibição: ${usarContadorNumerico ? "Contador" : "Bolinhas"} (max = ${max})`);
 			
-			for (let i = 0; i < max; i++) {
-				bolinhas.push(i < valor ? '●' : '○');
+			// Define contaor numérico se forem máximo for muito grande; culpa da Emy
+			if (usarContadorNumerico) {
+				logDebug(`${prefixo} ${FN} Contador Numérico escolhido`);
+				const textoContador = `${valor} / ${max}`;
+				const digitosMax = String(max).length;
+				const larguraMinima = 28 + (digitosMax * 10); // base + 10px por dígito
+				
+				permanente.find(".resource-value").html(`
+  <span class="hpdc-contador" style="
+    display: inline-block;
+    padding: 0 4px;
+    background-color: #5a1a1a;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 4px;
+    font-size: 15px;
+    font-family: Eczar, Georgia, serif;
+    font-weight: bold;
+    line-height: 1;
+    color: #E9D7A1;
+    min-width: 38px;
+    text-align: center;
+  ">
+    ${textoContador}
+  </span>
+`);		   
+			   logDebug(`${prefixo} ${FN} Contador renderizado: ${textoContador}`);
+			   
+			} else {
+				logDebug(`${prefixo} ${FN} Contador de Bolinhas escolhido`);
+				const bolinhas = [];
+				
+				for (let i = 0; i < max; i++) {
+					const simbolo = i < valor ? '●' : '○';
+					bolinhas.push(simbolo);
+					logDebug(`${prefixo} ${FN} Bolinha ${i + 1}: ${simbolo}`);
+				}
+				
+				const stringFinal = bolinhas.join(" ");
+				
+				permanente.find(".resource-value").text(stringFinal);
+				logDebug(`${prefixo} ${FN} Bolinhas renderizadas: ${stringFinal}`);
 			}
-			
-			permanente.find(".resource-value").text(bolinhas.join(" "));
 			
 			// Tooltip principal dinamica
 			let tooltipTexto = `${valor}/${max} ${nomeHPdC}`;

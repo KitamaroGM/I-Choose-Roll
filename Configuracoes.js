@@ -9,9 +9,9 @@ console.log(`I Choose Roll! [Configurações] 1.0.83 carregado — inicializando
 // Bloco 0 - Constantes do Projeto
 //====================
 
-const logo = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="32" height="32" style="vertical-align:middle; margin-right:8px;">`;
-const logoP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="28" height="28" style="vertical-align:middle; margin-right:6px;">`;
-const logoPP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="16" height="16" style="vertical-align:middle; margin-right:4px;">`;
+const logo = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="32" height="32" style="vertical-align:middle;margin:0 4px 0 0;display:inline-block;">`;
+const logoP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="28" height="28" style="vertical-align:middle; margin:0 4px 0 0;display:inline-block;">`;
+const logoPP = `<img src="modules/i-choose-roll/assets/logo.png" alt="logo" width="16" height="16" style="vertical-align:middle; margin:0 4px 0 0;display:inline-block;">`;
 const prefixo = "I Choose Roll! [Configurações]";
 const mID = "i-choose-roll";
 let iconeHPdC = logoP;
@@ -21,6 +21,7 @@ const CHPdC = "Hero Point da Casa";
 //====================
 // Função para modo debug
 //====================
+console.log(`I Choose Roll! [Configurações] Registrando logDebug`);
 function debugLigado() {
   return game.settings.get("i-choose-roll", "modoDebug") === true;
 }
