@@ -67,7 +67,7 @@ async function executarRelinkComoGM() {
 	const deletedByTokens = [];
 	
 	for (const b of backups) {
-		const raw = b.system.deprefixoion.value;
+		const raw = b.system.description.value;
 		const match = raw.match(/<pre>(.*?)<\/pre>/s);
 		if (!match) continue;
 		
@@ -112,7 +112,7 @@ async function executarRelinkComoGM() {
 			if (!actor) continue;
 			
 			for (const b of backups) {
-				const raw = b.system.deprefixoion.value;
+				const raw = b.system.description.value;
 				const match = raw.match(/<pre>(.*?)<\/pre>/s);
 				if (!match) continue;
 				
@@ -149,10 +149,10 @@ async function executarRelinkComoGM() {
 						data.hookId = hookId;
 						
 						const updated = raw.replace(/<pre>(.*?)<\/pre>/s, `<pre>${JSON.stringify(data, null, 2)}</pre>`);
-						await b.update({ "system.deprefixoion.value": updated });
+						await b.update({ "system.description.value": updated });
 						await mountToken.update({ x: mountToken.x + 0 });
 						logDebug(`${prefixo} [${scene.name}] ${actor.name}: Hook restaurado.`);
-						UIDebug(`${logo} [${scene.name}] ${actor.name}: vínculo restaurado.`);
+						UIDebug(`[${scene.name}] ${actor.name}: vínculo restaurado.`);
 					}
 					
 				} catch (e) {
@@ -188,7 +188,7 @@ async function executarRelinkComoGM() {
 			whisper: [game.user.id],
 			type: CONST.CHAT_MESSAGE_TYPES.OTHER
 		});
-	}	
+	}
 	
 	if (destravou) {
 		logDebug(`${prefixo} Re-travando o compêndio...`);
