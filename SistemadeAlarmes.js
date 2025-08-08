@@ -241,13 +241,13 @@ Hooks.on("pf2e.startTurn", async (combatente) => {
 		  <div class="chat-card" data-effect-id="${idEfeito}">
 		  <img src="${efeito.img}" width="32" height="32" style="vertical-align:middle; margin-right:8px;"><strong>${efeito.name}</strong><br><br>
 		  Gastar uma ação para sustentar o efeito?<br><br>
-		  <button data-acao="sustentar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}">✔️ Sustentar</button>
-		  <button data-acao="dissipar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}">❌ Dissipar</button>`;
+		  <button data-acao="sustentar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}" style="width: 100%;">✔️ Sustentar</button>
+		  <button data-acao="dissipar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}" style="width: 100%; margin-top: 2px;">❌ Dissipar</button>`;
 		
 		if (podeSincronizar) {
 			htmlMensagem += `
-			<br><br>
-			<button data-acao="sincronizar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}">⏳ Sincronizar</button>`;
+			
+			<button data-acao="sincronizar" data-efeito="${idEfeito}" data-token="${token.id}" data-nome="${efeito.name}" style="width: 100%; margin-top: 6px;">⏳ Sincronizar</button>`;
 		}
 
 		htmlMensagem += `</div>`;
