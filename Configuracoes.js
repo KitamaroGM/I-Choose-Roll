@@ -47,7 +47,7 @@ export function estaAtiva(chave) {
 }
 
 //====================
-// Bloco 2 - Registro das opções no hook ready
+// Bloco 2 - Registro das opções no hook init
 //====================
 Hooks.once("init", () => {
 	console.log(`${prefixo} Registrando opções no Foundry.`);
@@ -475,7 +475,7 @@ activateListeners(html) {
   super.activateListeners(html);
 
   globalThis["i-choose-roll"].MacrosAutomaticasConfig.instalarOuvintesMacros(html);
-  globalThis["i-choose-roll"].MacrosAutomaticasExec.carregarBlocosMacros(html);
+  globalThis["i-choose-roll"].MacrosAutomaticasConfig.carregarBlocosMacros(html);
 }
 
 	async _updateObject(event, formData) {
