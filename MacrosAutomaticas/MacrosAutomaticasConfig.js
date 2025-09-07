@@ -540,7 +540,7 @@ function reorganizarPosicoes(lista) {
 // Expor funções no namespace do módulo
 //====================
 if (!globalThis[mID]) globalThis[mID] = {};
-globalThis[mID].MacrosAutomaticas = {
+globalThis[mID].MacrosAutomaticasConfig = {
   carregarBlocosMacros,
   instalarOuvintesMacros,
   coletarDadosDoBloco,

@@ -140,7 +140,7 @@ function executarMacrosSalvas() {
 // Expor funções no namespace do módulo
 //====================
 if (!globalThis[mID]) globalThis[mID] = {};
-globalThis[mID].MacrosAutomaticas = {
+globalThis[mID].MacrosAutomaticasExec = {
   prepararExecucaoMacros,
   executarMacrosSalvas
 };
