@@ -474,8 +474,8 @@ static get defaultOptions() {
 activateListeners(html) {
   super.activateListeners(html);
 
-  globalThis["i-choose-roll"].MacrosAutomaticas.instalarOuvintesMacros(html);
-  globalThis["i-choose-roll"].MacrosAutomaticas.carregarBlocosMacros(html);
+  globalThis["i-choose-roll"].MacrosAutomaticasConfig.instalarOuvintesMacros(html);
+  globalThis["i-choose-roll"].MacrosAutomaticasExec.carregarBlocosMacros(html);
 }
 
 	async _updateObject(event, formData) {
