@@ -3,7 +3,7 @@
 //====================
 
 // Log inicial para rastreio
-console.log(`I Choose Roll! [Configurações] 1.0.83 carregado — inicializando variáveis e constantes`);
+console.log(`I Choose Roll! [Configurações] carregado — inicializando variáveis e constantes`);
 
 //====================
 // Bloco 0 - Constantes do Projeto
@@ -53,7 +53,24 @@ Hooks.once("init", () => {
 	console.log(`${prefixo} Registrando opções no Foundry.`);
 	
 	//====================
-	// Bloco 2.1 - Botão para abrir configurações avançadas do Hero Point da Casa (sem template por enquanto)
+	// Bloco 2.1 - Modo Debug
+	//====================
+	console.log(`${prefixo} Registrando modo debug do módulo "I Choose Roll!".`);
+	
+	game.settings.register(mID, "modoDebug", {
+		name: "Modo Debug",
+		hint: "Ativa logs e rastreamento detalhado para desenvolvimento e testes.",
+		scope: "world",
+		config: true,
+		type: Boolean,
+		default: false,
+		
+		onChange: valor => {
+			console.log(`${prefixo} Opção [modoDebug] alterada para`, valor);
+		}
+	});
+	//====================
+	// Bloco 2.2 - Botão para abrir configurações avançadas do Hero Point da Casa (sem template por enquanto)
 	//====================
 	
 	// Essa parte registra o botão no painel de Configurações do Mundo
@@ -79,6 +96,30 @@ Hooks.once("init", () => {
 		precisaRecarregar: true
 	});
 	
+//====================
+// Bloco 2.3 - Botão para abrir configurações de Macros Automáticas
+//====================
+console.log(`${prefixo} Registrando botão para configurações de Macros Automáticas.`);
+
+game.settings.registerMenu(mID, "menuMacrosAutomaticas", {
+	name: "Macros Automáticas",
+	label: "Abrir Configurações",
+	hint: "Configure quais macros devem iniciar automaticamente quando o mundo carregar.",
+	icon: "<i class='fas fa-play'></i>",
+	type: ClasseFormularioMacrosAutomaticas,
+	restricted: false
+});
+
+// Registro da lista de macros automáticas
+game.settings.register(mID, "iniciarMacrosLista", {
+	name: "Lista de Macros Automáticas",
+	hint: "Armazena as macros configuradas para execução automática.",
+	scope: "world",
+	config: false,
+	type: Array,
+	default: []
+});
+
 	// Campo para definir um ícone personalizado para o HPdC
 	console.log(`${prefixo} HPdC registrado, registrando URL de icone de HPdC.`)
 	
@@ -396,27 +437,53 @@ Hooks.once("init", () => {
 			console.log(`${prefixo} HPdCMaior atualizado para:`, valor);
 		}
 	});
-	
-	// Modo debug
-	console.log(`${prefixo} Registrando modo debug do módulo "I Choose Roll!".`);
-	
-	game.settings.register(mID, "modoDebug", {
-		name: "Modo Debug",
-		hint: "Ativa logs e rastreamento detalhado para desenvolvimento e testes.",
-		scope: "world",
-		config: true,
-		type: Boolean,
-		default: false,
-		
-		onChange: valor => {
-			console.log(`${prefixo} Opção [modoDebug] alterada para`, valor);
-		}
-	});
 
 	// Futuras opções podem ser adicionadas aqui chamando registrarOpcao({ … })
 	
 	console.log(`${prefixo} Todas as opções foram registradas`);
 });
+
+// Essa parte define a classe para a janela de configuração de Macros Automáticas
+class ClasseFormularioMacrosAutomaticas extends FormApplication {
+	constructor(...args) {
+		super(...args);
+		console.log(`${prefixo} ClasseFormularioMacrosAutomaticas inicializada`);
+	}
+
+static get defaultOptions() {
+	return foundry.utils.mergeObject(super.defaultOptions, {
+		id: "icr-config-iniciar-macros",
+		title: " ",
+		template: "modules/i-choose-roll/templates/config-iniciar-macros.html",
+		width: 700,
+		height: 700,
+		closeOnSubmit: true
+	});
+}
+
+
+	getData() {
+		console.log(`${prefixo} Coletando dados atuais para Macros Automáticas`);
+		const ehGM = game.user.isGM;
+		return {
+			iniciarMacrosLista: game.settings.get(mID, "iniciarMacrosLista") || [],
+			ehGM
+		};
+	}
+
+activateListeners(html) {
+  super.activateListeners(html);
+
+  globalThis["i-choose-roll"].MacrosAutomaticas.instalarOuvintesMacros(html);
+  globalThis["i-choose-roll"].MacrosAutomaticas.carregarBlocosMacros(html);
+}
+
+	async _updateObject(event, formData) {
+		console.log(`${prefixo} Salvando configurações de Macros Automáticas`, formData);
+		await game.world.setFlag(mID, "iniciarMacrosLista", formData.iniciarMacrosLista);
+		ui.notifications.info(`${logo} Configurações de Macros Automáticas atualizadas.`);
+	}
+}
 
 // Essa parte define a classe básica para a nova janela de configuração
 class ClasseFormularioHPdC extends FormApplication {
@@ -695,5 +762,5 @@ Hooks.once("ready", () => {
 	console.log(`${prefixo} debug exportado apra window`);
 	
 	window.logDebug = logDebug;
-	console.log(`${prefixo} logdebu exportado apra window`);
+	console.log(`${prefixo} logdebug exportado apra window`);
 });

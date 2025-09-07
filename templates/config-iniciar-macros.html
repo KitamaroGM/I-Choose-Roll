@@ -1,0 +1,201 @@
+<style>
+  /* Reuso integral do padrão do HPdC */
+  #form-iniciar-macros .switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+  }
+  #form-iniciar-macros .switch input { display: none; }
+  #form-iniciar-macros .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 20px;
+  }
+  #form-iniciar-macros .slider:before {
+    position: absolute;
+    content: "";
+    height: 16px; width: 16px;
+    left: 2px; bottom: 2px;
+    background: white;
+    transition: .4s;
+    border-radius: 50%;
+  }
+  #form-iniciar-macros input:checked + .slider { background-color: #d00; }
+  #form-iniciar-macros input:checked + .slider:before { transform: translateX(20px); }
+
+  #form-iniciar-macros .window-content {
+    border: 2px solid #d00;
+    border-radius: 4px;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  #form-iniciar-macros .header-icr {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  #form-iniciar-macros .header-icr strong { font-size: 130%; }
+  #form-iniciar-macros .form-group { margin-bottom: 10px; }
+  #form-iniciar-macros .form-group label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 4px;
+  }
+  #form-iniciar-macros .form-group input[type="text"] {
+    width: 100%;
+    padding: 4px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-family: monospace;
+  }
+
+  #form-iniciar-macros .bloco-macro {
+    margin-bottom: 12px;
+    padding: 8px;
+    border: 1px solid #999;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  #form-iniciar-macros .botao-add {
+    background: #f0f0f0;
+    border: 2px solid #d00;
+    border-radius: 4px;
+    padding: 6px;
+    width: 100%;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+    font-size: 110%;
+  }
+  
+  #form-iniciar-macros .botao-add:hover { background: #ffe5e5; }
+  #form-iniciar-macros hr {
+    border: none;
+    border-top: 2px solid #d00;
+    margin: 6px 0;
+  }
+  
+#form-iniciar-macros .botao-recarregar {
+  background: #fff3cd;
+  color: #a00;
+  border: 2px solid #d00;
+  border-radius: 4px;
+  padding: 6px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+  font-size: 110%;
+  transition: background 0.2s;
+}
+#form-iniciar-macros .botao-recarregar:hover {
+  background: #ffeeba;
+}
+
+</style>
+
+<form id="form-iniciar-macros" class="icr-formulario">
+  <div class="header-icr">
+    <img src="modules/i-choose-roll/assets/logo.png" width="36" height="36" style="border:none;">
+    <strong>I Choose Roll! Macros Automáticas</strong>
+  </div>
+
+  <p style="font-size:90%; margin-bottom:8px;">
+    Configure aqui as macros que devem rodar automaticamente ao carregar o mundo.<br>
+	<em>As Macros serão executadas automaticamente <strong>3s</strong> após o primeiro carregamento do canvas, com intervalo de <strong>0.3s</strong> entre elas.</em>
+  </p>
+
+  <hr>
+
+  <div id="blocos-macros" class="icr-macros-lista">
+    <!-- Blocos de macro inseridos via JS -->
+  </div>
+
+<div style="display:flex; justify-content:center; gap:10px; margin:10px 0;">
+  <div class="botao-add" id="adicionar-macro"
+       style="flex:1; max-width:calc(50% - 10px); text-align:center;">
+    + Adicionar nova macro
+  </div>
+
+  {{#if ehGM}}
+  <div class="botao-recarregar" id="recarregar-clientes"
+       style="flex:1; max-width:calc(50% - 10px); text-align:center;
+              background:#fff3cd; border:2px solid #d00; border-radius:4px;
+              padding:6px; cursor:pointer; font-weight:bold; font-size:110%;">
+    ⚠️ Recarregar Clientes
+  </div>
+  {{/if}}
+</div>
+
+
+  <template id="icr-template-macro">
+    <div class="bloco-macro" style="border:2px solid #d00; padding:10px;">
+	<div class="nome-macro-salva" style="display:none; text-align:center; 
+     font-weight:bold; font-size:135%; margin-bottom:8px; border-bottom:2px solid #d00; padding-bottom:4px;">
+</div>
+      
+	  <!-- UUID -->
+<div class="form-group" style="align-items: center;">
+  <label style="flex:0 0 auto; margin-right:8px;">UUID da Macro:</label>
+  <input type="text" name="uuid" placeholder="Ex: Macro.u7hg3jJx9dO2Y..." 
+         style="flex:1 1 auto; width:auto; padding:4px; border:2px solid #d00; border-radius:4px; font-family:monospace;">
+</div>
+<p style="font-size:100%; margin:6px 0 10px; ">
+  As macros serão executadas <strong>na ordem em que forem salvas</strong><br>
+  </p>
+  {{#if ehGM}}
+  	<p style="font-size:90%; margin:6px 0 10px; color:#555;">
+	<em>Macros marcadas para rodar nos jogadores precisam ter visibilidade mínima como: <strong>Limitada</strong>.</em>
+	</P>
+	{{/if}}
+
+      <!-- Switch rodar nos jogadores -->
+	  {{#if ehGM}}
+<div style="display:flex; align-items:center; gap:8px; margin:6px 0;">
+  <div style="display:flex; align-items:center; gap:8px;">
+    <span style="font-weight:bold;">Execução:</span>
+    <label class="switch">
+      <input type="checkbox" name="rodarNosJogadores" checked />
+      <span class="slider"></span>
+    </label>
+    <span style="line-height:20px;">Rodar também nos jogadores</span>
+  </div>
+{{/if}}
+
+  <div class="botoes-novos" style="display:flex; gap:6px; flex:1; justify-content:flex-end; height:20px;">
+    <button type="button" class="salvar-macro"
+      style="flex:1; height:100%; display:flex; align-items:center; justify-content:center; border:1px solid #0a0; border-radius:4px; cursor:pointer; font-size:90%;">
+      ✔️ Salvar
+    </button>
+    <button type="button" class="cancelar-macro"
+      style="flex:1; height:100%; display:flex; align-items:center; justify-content:center; border:1px solid #d00; border-radius:4px; cursor:pointer; font-size:90%;">
+      ❌ Cancelar
+    </button>
+  </div>
+
+  <div class="botoes-precarregados" style="display:none; gap:6px; flex:1; justify-content:flex-end; height:20px;">
+    <button type="button" class="atualizar-macro"
+      style="flex:1; height:100%; display:flex; align-items:center; justify-content:center; border:1px solid #0a0; border-radius:4px; cursor:pointer; font-size:90%;">
+      ✔️ Atualizar
+    </button>
+    <button type="button" class="excluir-macro"
+      style="flex:1; height:100%; display:flex; align-items:center; justify-content:center; border:1px solid #d00; border-radius:4px; cursor:pointer; font-size:90%;">
+      ❌ Remover
+    </button>
+  </div>
+</div>
+    </div>
+  </template>
+</form>

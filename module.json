@@ -1,7 +1,7 @@
 {
   "id": "i-choose-roll",
   "title": "I Choose Roll!",
-  "version": "1.0.0.1",
+  "version": "1.1.0.0",
   "socket": true,
   "url": "https://github.com/KitamaroGM/I-Choose-Roll",
   "manifest": "https://raw.githubusercontent.com/KitamaroGM/I-Choose-Roll/main/module.json",
@@ -13,6 +13,8 @@
     "ArbritoDeCombate.js",
     "SistemadeAlarmes.js",
     "socket_link.js",
+	"MacrosAutomaticas/MacrosAutomaticasConfig.js",
+	"MacrosAutomaticas/MacrosAutomaticasExec.js",
     "relinkOn.js"
   ],
   "compatibility": {

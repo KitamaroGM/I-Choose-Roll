@@ -3,7 +3,8 @@
 //====================
 
 // Log de rastreio: arquivo de SocketLink carregado
-console.log(`I Choose Roll! [SocketLink] 1.0.12 carregado — inicializando variáveis e constantes`);
+console.log(`I Choose Roll! [SocketLink] 1.0.13 carregado — inicializando variáveis e constantes`);
+
 //====================
 // Constantes globais para manter o padrão do projeto
 //====================
@@ -14,6 +15,26 @@ const mNome = "I Choose Roll!";
 const mID = "i-choose-roll";
 const CS = "i-choose-roll.choose-roll-system-bindings";
 const NCSistema = "I Choose Roll! [Arquivos de Sistema]";
+
+//====================
+// Funções utilitárias
+//====================
+
+// Define Log para Debug
+const logDebug = (...args) => {
+  const debugAtivo = game.settings.get("i-choose-roll", "modoDebug");
+  if (debugAtivo === true) {
+    console.log(...args);
+  }
+};
+
+// Função para mensagens de debug que são enviadas ao chat
+const mensagemDebug = (...args) => {
+  const debugAtivo = game.settings.get("i-choose-roll", "modoDebug");
+  if (debugAtivo === true) {
+    ChatMessage.create({ content: args.join(" ") });
+  }
+};
 
 //====================
 // Registro do módulo e funções no SocketLib
@@ -28,7 +49,96 @@ Hooks.once("socketlib.ready", () => {
 const mod = game.modules.get(mID);
 mod.api = mod.api || {};
 
-console.log(`${prefixo} Namespace API inicializado com stub resolveDefensivo`);
+//====================
+// alterarConfiguracoesTile - Altera os dados de um tile via GM e dá play no vídeo (se aplicável)
+//====================
+console.log(`${prefixo} Registrando função: alterarConfiguracoesTile`);
+
+SocketLink.register("alterarConfiguracoesTile", async ({ uuidTile, novosDados }) => {
+  try {
+    logDebug(`${prefixo} [alterarConfiguracoesTile] Iniciando com UUID: ${uuidTile}`);
+
+    // Validação básica dos parâmetros
+    if (!uuidTile || novosDados === undefined) {
+      console.warn(`${prefixo} [alterarConfiguracoesTile] Parâmetros ausentes ou inválidos`);
+      return false;
+    }
+
+    // Recupera o TileDocument
+    const tile = await fromUuid(uuidTile);
+    if (!tile) {
+      console.warn(`${prefixo} [alterarConfiguracoesTile] Tile não encontrado para UUID: ${uuidTile}`);
+      return false;
+    }
+
+    logDebug(`${prefixo} [alterarConfiguracoesTile] Tile encontrado: ID = ${tile.id}`);
+
+    // Aplica as alterações no documento (se houver)
+    if (Object.keys(novosDados).length > 0) {
+      await tile.update(novosDados);
+      logDebug(`${prefixo} [alterarConfiguracoesTile] Tile atualizado com sucesso`);
+    } else {
+      logDebug(`${prefixo} [alterarConfiguracoesTile] Nenhum dado de atualização fornecido`);
+    }
+
+    // Tenta acessar e tocar o vídeo diretamente
+    const fonte = tile?.object?.texture?.baseTexture?.resource?.source;
+
+    if (fonte instanceof HTMLVideoElement) {
+      logDebug(`${prefixo} [alterarConfiguracoesTile] Tile contém vídeo — tentando iniciar reprodução...`);
+      await fonte.play();
+      logDebug(`${prefixo} [alterarConfiguracoesTile] Reprodução de vídeo iniciada com sucesso`);
+    } else {
+      logDebug(`${prefixo} [alterarConfiguracoesTile] Tile não contém vídeo válido ou fonte inacessível`);
+    }
+
+    return true;
+
+  } catch (erro) {
+    console.error(`${prefixo} [alterarConfiguracoesTile] Erro ao processar tile:`, erro);
+    return false;
+  }
+});
+
+console.log(`${prefixo} Função registrada com sucesso: alterarConfiguracoesTile`);
+
+//====================
+// alterarConfiguracoesLuz - Altera os dados de uma luz via GM
+//====================
+console.log(`${prefixo} Registrando função: alterarConfiguracoesLuz`);
+
+SocketLink.register("alterarConfiguracoesLuz", async ({ uuidLuz, novosDados }) => {
+  try {
+    logDebug(`${prefixo} [alterarConfiguracoesLuz] Iniciando com UUID: ${uuidLuz}`);
+    
+    // Valida parâmetros
+    if (!uuidLuz || !novosDados) {
+      console.warn(`${prefixo} [alterarConfiguracoesLuz] Parâmetros ausentes ou inválidos`);
+      return false;
+    }
+
+    // Recupera a luz via UUID
+    const luz = await fromUuid(uuidLuz);
+    if (!luz) {
+      console.warn(`${prefixo} [alterarConfiguracoesLuz] Luz não encontrada para UUID: ${uuidLuz}`);
+      return false;
+    }
+
+    logDebug(`${prefixo} [alterarConfiguracoesLuz] Luz encontrada: ID = ${luz.id}`);
+
+    // Aplica as alterações
+    await luz.update(novosDados);
+    logDebug(`${prefixo} [alterarConfiguracoesLuz] Luz atualizada com sucesso`);
+
+    return true;
+
+  } catch (erro) {
+    console.error(`${prefixo} [alterarConfiguracoesLuz] Erro ao atualizar luz:`, erro);
+    return false;
+  }
+});
+
+console.log(`${prefixo} Função registrada com sucesso: alterarConfiguracoesLuz`);
 
   //====================
   // destravarCompendio - Remove o travamento de um compêndio
@@ -95,10 +205,11 @@ SocketLink.register("criarItem", async (dadosItem, compendioId) => {
       return false;
     }
     await compendio.getDocuments();
-    console.log(`${prefixo} Leitura de documentos realizada com sucesso para '${compendioId}'`);
+    logDebug(`${prefixo} Leitura de documentos realizada com sucesso para '${compendioId}'`);
     return true;
   });
   console.log(`${prefixo} Função registrada com sucesso: lerDocumentosCompendio`);
+
 //====================
 // criarMensagemGenerica - Cria uma ChatMessage com conteúdo customizado, visível para todos ou só GMs
 //====================
@@ -122,14 +233,14 @@ SocketLink.register("deletarMensagem", async (idMensagem) => {
     const msg = game.messages.get(idMensagem);
     if (msg) {
       await msg.delete();
-      console.log(`${prefixo} [SocketLink] Mensagem ${idMensagem} apagada via GM.`);
+      logDebug(`${prefixo} Mensagem ${idMensagem} apagada via GM.`);
       return true;
     } else {
-      console.warn(`${prefixo} [SocketLink] Mensagem ${idMensagem} não encontrada.`);
+      console.warn(`${prefixo} Mensagem ${idMensagem} não encontrada.`);
       return false;
     }
   } catch (err) {
-    console.error(`${prefixo} [SocketLink] Erro ao apagar mensagem:`, err);
+    console.error(`${prefixo} Erro ao apagar mensagem:`, err);
     throw err;
   }
 });
@@ -143,7 +254,7 @@ console.log(`${prefixo} Registrando função: RespostaDeMensagem`);
 SocketLink.register("RespostaDeMensagem", async ({ msgId, resposta }) => {
   try {
     // esse passo registra início do processamento
-    console.log(`${prefixo} [RespostaDeMensagem] Iniciando processamento para msgId=${msgId}, resposta=${resposta}`);
+    logDebug(`${prefixo} [RespostaDeMensagem] Iniciando processamento para msgId=${msgId}, resposta=${resposta}`);
     
     // esse passo valida parâmetros mínimos
     if (!msgId) {
@@ -163,11 +274,11 @@ SocketLink.register("RespostaDeMensagem", async ({ msgId, resposta }) => {
     }
 
     // esse passo chama o método interno responsável por tratar a resposta
-    console.log(`${prefixo} [RespostaDeMensagem] Chamando api.responderMensagem(${msgId}, ${resposta})`);
+    logDebug(`${prefixo} [RespostaDeMensagem] Chamando api.responderMensagem(${msgId}, ${resposta})`);
     await api.responderMensagem(msgId, resposta);
     
     // esse passo confirma sucesso da operação
-    console.log(`${prefixo} [RespostaDeMensagem] Resposta processada com sucesso para msgId=${msgId}`);
+    logDebug(`${prefixo} [RespostaDeMensagem] Resposta processada com sucesso para msgId=${msgId}`);
   } catch (erro) {
     // esse passo captura e loga qualquer erro ocorrido
     console.error(`${prefixo} [RespostaDeMensagem] Erro ao processar resposta de mensagem:`, erro);
@@ -182,7 +293,7 @@ console.log(`${prefixo} Registrando função: executarRerollSimplesComoGM`);
 
 SocketLink.register("executarRerollSimplesComoGM", async ({ rollData, keep = "new" }) => {
   try {
-    console.log(`${prefixo} [executarRerollSimplesComoGM] Iniciando execução`);
+    logDebug(`${prefixo} [executarRerollSimplesComoGM] Iniciando execução`);
 
     // esse passo valida se os dados da rolagem foram passados corretamente
     if (!rollData) {
@@ -190,15 +301,15 @@ SocketLink.register("executarRerollSimplesComoGM", async ({ rollData, keep = "ne
       return null;
     }
 
-    console.log(`${prefixo} [executarRerollSimplesComoGM] Dados recebidos. Keep: "${keep}"`);
+    logDebug(`${prefixo} [executarRerollSimplesComoGM] Dados recebidos. Keep: "${keep}"`);
 
     // esse passo reconstrói a rolagem original a partir do toJSON
     const rolagemOriginal = Roll.fromData(rollData);
-    console.log(`${prefixo} [executarRerollSimplesComoGM] Rolagem original reconstruída com fórmula: ${rolagemOriginal.formula}`);
+    logDebug(`${prefixo} [executarRerollSimplesComoGM] Rolagem original reconstruída com fórmula: ${rolagemOriginal.formula}`);
 
     // esse passo executa a nova rerrolagem com a opção keep (padrão: "new")
     const novaRolagem = await rolagemOriginal.reroll({ keep });
-    console.log(`${prefixo} [executarRerollSimplesComoGM] Nova rolagem executada com total: ${novaRolagem.total}`);
+    logDebug(`${prefixo} [executarRerollSimplesComoGM] Nova rolagem executada com total: ${novaRolagem.total}`);
 
     // esse passo retorna os dados da nova rolagem para o cliente
     return {
@@ -220,7 +331,7 @@ console.log(`${prefixo} Função registrada com sucesso: executarRerollSimplesCo
 //====================
 SocketLink.register("dispararHookRerollComoGM", async ({ mensagemId, novaRolagemData, rolagemOriginalData, keep }) => {
   try {
-    console.log(`${prefixo} [dispararHookRerollComoGM] Iniciando execução`);
+    logDebug(`${prefixo} [dispararHookRerollComoGM] Iniciando execução`);
 
     // esse passo recupera a mensagem original pelo ID
     const mensagem = game.messages.get(mensagemId);
@@ -240,7 +351,7 @@ SocketLink.register("dispararHookRerollComoGM", async ({ mensagemId, novaRolagem
       keep
     });
 
-    console.log(`${prefixo} [dispararHookRerollComoGM] Hook 'pf2e.reroll' disparado com sucesso.`);
+    logDebug(`${prefixo} [dispararHookRerollComoGM] Hook 'pf2e.reroll' disparado com sucesso.`);
 
     return true;
 
@@ -260,7 +371,7 @@ console.log(`${prefixo} Registrando função de resposta para HPdCDefensivo`);
 SocketLink.register("aceitarDesafioSocket", async (dadosKanto) => {
 	
   try {
-    console.log(`${prefixo} [aceitarDesafio] Iniciando solicitação de rerolagem defensiva.`);
+    logDebug(`${prefixo} [aceitarDesafio] Iniciando solicitação de rerolagem defensiva.`);
 	const icone = game.settings.get("i-choose-roll", "iconeHPdC")?.trim();
 const iconeHPdC = icone
   ? `<img src="${icone}" alt="iconeHPdC" width="28" height="28" style="vertical-align:middle; margin-right:6px;">`
@@ -287,7 +398,7 @@ const nomeHPdC = game.settings.get(mID, "nomeHPdC")?.trim() || "Hero Point da Ca
       </div>`;
 
     // Bloco 2 - Envia mensagem via socket para criação pelo GM
-console.log(`${prefixo} [aceitarDesafio] Buscando token e speaker do pagante.`);
+logDebug(`${prefixo} [aceitarDesafio] Buscando token e speaker do pagante.`);
 
 // Recupera o ator pagante
 if (!pagante) {
@@ -313,14 +424,14 @@ const dados = {
 const msg = await ChatMessage.create(dados);
 const msgId = msg.id;
 
-console.log(`${prefixo} [aceitarDesafio] Mensagem enviada ao GM. ID da mensagem: ${msgId}`);
+logDebug(`${prefixo} [aceitarDesafio] Mensagem enviada ao GM. ID da mensagem: ${msgId}`);
 
     // Bloco 3 - Espera pela resposta do GM
     const escolha = await new Promise(resolve => {
       const gancho = Hooks.on("renderChatMessage", (msg, html) => {
         if (msg.id !== msgId) return;
 
-        console.log(`${prefixo} [aceitarDesafio] Mensagem ${msgId} reconhecida. Preparando botões...`);
+        logDebug(`${prefixo} [aceitarDesafio] Mensagem ${msgId} reconhecida. Preparando botões...`);
 		
 		 html.find('.hpdc-defensivo-confirmar[data-msg-id="pendente"]').attr("data-msg-id", msgId);
         const $card = html.find(`.hpdc-defensivo-confirmar[data-msg-id="${msgId}"]`);
@@ -331,7 +442,7 @@ console.log(`${prefixo} [aceitarDesafio] Mensagem enviada ao GM. ID da mensagem:
 
         // clique em "Confirmar"
         $card.find(".confirmar-hpdc-def").off("click").on("click", () => {
-          console.log(`${prefixo} [aceitarDesafio] GM confirmou reroll defensivo`);
+          logDebug(`${prefixo} [aceitarDesafio] GM confirmou reroll defensivo`);
           Hooks.off("renderChatMessage", gancho);
 		  game.messages.get(msgId)?.delete();
           resolve(true);
@@ -339,7 +450,7 @@ console.log(`${prefixo} [aceitarDesafio] Mensagem enviada ao GM. ID da mensagem:
 
         // clique em "Cancelar"
         $card.find(".cancelar-hpdc-def").off("click").on("click", () => {
-          console.log(`${prefixo} [aceitarDesafio] GM cancelou reroll defensivo`);
+          logDebug(`${prefixo} [aceitarDesafio] GM cancelou reroll defensivo`);
           Hooks.off("renderChatMessage", gancho);
 		  game.messages.get(msgId)?.delete();
           resolve(false);
@@ -347,7 +458,7 @@ console.log(`${prefixo} [aceitarDesafio] Mensagem enviada ao GM. ID da mensagem:
       });
     });
 
-    console.log(`${prefixo} [aceitarDesafio] Resposta final do GM: ${escolha}`);
+    logDebug(`${prefixo} [aceitarDesafio] Resposta final do GM: ${escolha}`);
     return escolha;
 
   } catch (erro) {
@@ -365,7 +476,7 @@ SocketLink.register("coletarDadosKanto", async (msgId) => {
   const mensagem = game.messages.get(msgId);
   if (!mensagem) return null;
 
-  console.log(`${prefixo} [coletarDadosKanto] Iniciando coleta de dados para a mensagem ID ${mensagem.id}`);
+  logDebug(`${prefixo} [coletarDadosKanto] Iniciando coleta de dados para a mensagem ID ${mensagem.id}`);
 
   //====================
   // Bloco de Constantes Internas
@@ -417,7 +528,7 @@ const ehGM = game.user.isGM;
 
 // CASO A: personagem com disposição normal — uso direto
 if (tipo === "character" && disposicao !== -1) {
-  console.log(`${prefixo} [coletarDadosKanto] Ator da mensagem é personagem com disposição normal — uso direto.`);
+  logDebug(`${prefixo} [coletarDadosKanto] Ator da mensagem é personagem com disposição normal — uso direto.`);
 
   const nome = atorMensagem.name;
   const chavesFlags = ["HPdCConsolacao", "HPdCDefensivo", "HPdCNoDano", "HPdCRoubado"];
@@ -451,7 +562,7 @@ if (tipo === "character" && disposicao !== -1) {
 
 } else if (disposicao === -1) {
   dadosKanto.rota = "Defensiva";
-  console.log(`${prefixo} [coletarDadosKanto] Disposição -1 detectada — rota defensiva.`);
+  logDebug(`${prefixo} [coletarDadosKanto] Disposição -1 detectada — rota defensiva.`);
 
   for (const ator of game.actors) {
     if (!ator.testUserPermission(usuario, "OWNER")) continue;
@@ -487,7 +598,7 @@ if (tipo === "character" && disposicao !== -1) {
 
 // CASO C: fallback — varredura com filtro se for GM
 } else {
-  console.log(`${prefixo} [coletarDadosKanto] Situação normal — varrendo atores permitidos.`);
+  logDebug(`${prefixo} [coletarDadosKanto] Situação normal — varrendo atores permitidos.`);
 
   for (const ator of game.actors) {
     if (!ator.testUserPermission(usuario, "OWNER")) continue;
@@ -523,7 +634,7 @@ if (tipo === "character" && disposicao !== -1) {
   }
 }
 
-  console.log(`${prefixo} [coletarDadosKanto] Coleta de atores finalizada. ${atoresControlados.length} atores controlados detectados.`);
+  logDebug(`${prefixo} [coletarDadosKanto] Coleta de atores finalizada. ${atoresControlados.length} atores controlados detectados.`);
 
   //====================
   // Retorno do Objeto dadosKanto
@@ -550,7 +661,7 @@ if (tipo === "character" && disposicao !== -1) {
     usouRoubado10: false
   };
 
-  console.log(`${prefixo} [coletarDadosKanto] Coleta finalizada com sucesso.`);
+  logDebug(`${prefixo} [coletarDadosKanto] Coleta finalizada com sucesso.`);
   dadosKanto.permanentes = await atorPrincipal.getFlag(mID, "heroPointsDaCasa") ?? 0;
   return dadosKanto;
 });
@@ -586,6 +697,92 @@ if (tipo === "character" && disposicao !== -1) {
     return hookId;
   });
   console.log(`${prefixo} Função registrada com sucesso: criarHookMovimento`);
+
+//====================
+// removerOuvinteInteracao - remove ouvintes de interação em todos os clientes
+//====================
+console.log(`${prefixo} Registrando função: removerInteracoesDocumento`);
+
+SocketLink.register("removerInteracoesDocumento", async ({ docId, nomeConfig }) => {
+  logDebug(`${prefixo} [removerInteracoesDocumento] recebido no socket — disparando hook global.`);
+
+  const doc = canvas.tokens.get(docId)?.document
+           || canvas.tiles.get(docId)?.document
+           || canvas.notes.get(docId)?.document;
+
+  if (!doc) {
+    console.warn(`${prefixo} Documento não encontrado para ID=${docId}`);
+    return false;
+  }
+
+  Hooks.call("icr.removerInteracoesDocumento", { docId: doc.id, nomeConfig });
+  return true;
+});
+console.log(`${prefixo} Função registrada com sucesso: removerInteracoesDocumento`);
+
+//====================
+// instalarOuvinteInteracao - instala ouvintes de interação em todos os clientes
+//====================
+console.log(`${prefixo} Registrando função: instalarInteracoesDocumento`);
+
+SocketLink.register("instalarInteracoesDocumento", async ({ docId, nomeConfig }) => {
+  logDebug(`${prefixo} [instalarInteracoesDocumento] recebido no socket — disparando hook global.`);
+
+  const doc = canvas.tokens.get(docId)?.document
+           || canvas.tiles.get(docId)?.document
+           || canvas.notes.get(docId)?.document;
+
+  if (!doc) {
+    console.warn(`${prefixo} Documento não encontrado para ID=${docId}`);
+    return false;
+  }
+
+  Hooks.call("icr.instalarInteracoesDocumento", { docId: doc.id, nomeConfig });
+  return true;
+});
+console.log(`${prefixo} Função registrada com sucesso: instalarInteracoesDocumento`);
+
+//====================
+// receberListaDoPlayer - Player expõe sua lista de macros para o GM
+//====================
+console.log(`${prefixo} Registrando função: receberListaDoPlayer`);
+
+SocketLink.register("receberListaDoPlayer", async ({ userId, lista }) => {
+  try {
+    const usuario = game.users.get(userId);
+    if (!usuario) {
+      console.warn(`${prefixo} [receberListaDoPlayer] Usuário não encontrado para ID=${userId}`);
+      return false;
+    }
+
+    await usuario.setFlag(mID, "iniciarMacrosLista", lista);
+    logDebug(`${prefixo} [receberListaDoPlayer] Lista recebida do player ${userId} e salva em User.flags`);
+    return true;
+  } catch (erro) {
+    console.error(`${prefixo} [receberListaDoPlayer] Erro ao salvar lista:`, erro);
+    return false;
+  }
+});
+
+console.log(`${prefixo} Função registrada com sucesso: receberListaDoPlayer`);
+
+//====================
+// receberListaDoGM - GM expõe sua lista de macros para todos os clientes
+//====================
+console.log(`${prefixo} Registrando função: receberListaDoGM`);
+
+SocketLink.register("receberListaDoGM", async ({ gmId, lista }) => {
+  try {
+    window.icrListaGM = lista;
+    logDebug(`${prefixo} [receberListaDoGM] Lista do GM (${gmId}) recebida e armazenada em cache local`);
+    return true;
+  } catch (erro) {
+    console.error(`${prefixo} [receberListaDoGM] Erro ao processar lista do GM:`, erro);
+    return false;
+  }
+});
+
+console.log(`${prefixo} Função registrada com sucesso: receberListaDoGM`);
 
 //====================
 // recarregarClientes - Recarrega todos os clientes do Foundry
